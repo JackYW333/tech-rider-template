@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Act Name - Tech Rider</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <h1 class="act-name" contenteditable="true" spellcheck="false">Act Name</h1>
+      <p class="act-subtitle" contenteditable="true" spellcheck="false">Tech Rider</p>
+      <div class="header-meta">
+        <span class="meta-field" id="meta-venue" contenteditable="true" spellcheck="false" data-placeholder="Venue"></span>
+        <span class="meta-sep" id="meta-sep-1"></span>
+        <span class="meta-field" id="meta-date" contenteditable="true" spellcheck="false" data-placeholder="Date"></span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="btn-clear-all" class="btn btn-danger">Clear All</button>
+      <button id="btn-settings-export" class="btn btn-secondary">Save Settings</button>
+      <label id="btn-settings-import" class="btn btn-secondary">Load Settings
+        <input type="file" id="input-settings-file" accept=".json" style="display:none">
+      </label>
+      <button id="btn-export-pdf" class="btn">Export PDF</button>
+      <button id="btn-export-jpg" class="btn">Export JPG</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Stage Plot -->
+    <section class="section" id="section-stage">
+      <h2 class="section-title">Stage Plot</h2>
+      <div class="stage-toolbar" id="stage-toolbar">
+        <span class="toolbar-label">Add:</span>
+        <button class="tool-btn" data-type="vocal">Vocal</button>
+        <button class="tool-btn" data-type="drums">Drums</button>
+        <button class="tool-btn" data-type="guitar-electric">Electric</button>
+        <button class="tool-btn" data-type="guitar-acoustic">Acoustic</button>
+        <button class="tool-btn" data-type="bass">Bass</button>
+        <button class="tool-btn" data-type="keys">Keys</button>
+        <button class="tool-btn" data-type="amp-guitar">Guitar Amp</button>
+        <button class="tool-btn" data-type="amp-bass">Bass Amp</button>
+        <button class="tool-btn" data-type="di">DI</button>
+        <button class="tool-btn" data-type="monitor">Monitor</button>
+        <button class="tool-btn" data-type="laptop">Laptop</button>
+        <button class="tool-btn" data-type="power">Power</button>
+      </div>
+      <div class="stage-controls">
+        <button class="tool-btn" id="btn-snap">Snap: Off</button>
+        <button class="btn btn-sm btn-danger" id="btn-clear-stage">Clear Stage</button>
+      </div>
+      <div class="stage-wrap">
+        <div class="stage" id="stage">
+          <div class="stage-label-audience">AUDIENCE</div>
+          <div class="stage-label-back">BACK OF STAGE</div>
+        </div>
+      </div>
+      <p class="stage-hint">Click an item above to add it, then drag to position. Double-click a label to rename. Right-click to delete. Use the ↻ handle to rotate.</p>
+    </section>
+
+    <!-- Input List -->
+    <section class="section" id="section-inputs">
+      <h2 class="section-title">Input List</h2>
+      <div class="table-actions">
+        <button id="btn-add-row" class="btn btn-sm">+ Add Row</button>
+        <button id="btn-clear-inputs" class="btn btn-sm btn-danger">Clear</button>
+      </div>
+      <div class="table-wrap">
+        <table id="input-table">
+          <thead>
+            <tr>
+              <th class="drag-handle-cell"></th>
+              <th>#</th>
+              <th>Instrument / Source</th>
+              <th>Mic / DI</th>
+              <th>Stand</th>
+              <th>Phantom (+48V)</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="input-tbody">
+            <tr>
+              <td class="ch-num">1</td>
+              <td contenteditable="true" spellcheck="false">Kick In</td>
+              <td contenteditable="true" spellcheck="false">Beta 52A</td>
+              <td contenteditable="true" spellcheck="false">No</td>
+              <td class="phantom-cell"><input type="checkbox" /></td>
+              <td contenteditable="true" spellcheck="false"></td>
+            </tr>
+            <tr>
+              <td class="ch-num">2</td>
+              <td contenteditable="true" spellcheck="false">Snare Top</td>
+              <td contenteditable="true" spellcheck="false">SM57</td>
+              <td contenteditable="true" spellcheck="false">No</td>
+              <td class="phantom-cell"><input type="checkbox" /></td>
+              <td contenteditable="true" spellcheck="false"></td>
+            </tr>
+            <tr>
+              <td class="ch-num">3</td>
+              <td contenteditable="true" spellcheck="false">Hi-Hat</td>
+              <td contenteditable="true" spellcheck="false">SM81</td>
+              <td contenteditable="true" spellcheck="false">No</td>
+              <td class="phantom-cell"><input type="checkbox" checked /></td>
+              <td contenteditable="true" spellcheck="false"></td>
+            </tr>
+            <tr>
+              <td class="ch-num">4</td>
+              <td contenteditable="true" spellcheck="false">OH Left</td>
+              <td contenteditable="true" spellcheck="false">SM81</td>
+              <td contenteditable="true" spellcheck="false">Boom</td>
+              <td class="phantom-cell"><input type="checkbox" checked /></td>
+              <td contenteditable="true" spellcheck="false"></td>
+            </tr>
+            <tr>
+              <td class="ch-num">5</td>
+              <td contenteditable="true" spellcheck="false">OH Right</td>
+              <td contenteditable="true" spellcheck="false">SM81</td>
+              <td contenteditable="true" spellcheck="false">Boom</td>
+              <td class="phantom-cell"><input type="checkbox" checked /></td>
+              <td contenteditable="true" spellcheck="false"></td>
+            </tr>
+            <tr>
+              <td class="ch-num">6</td>
+              <td contenteditable="true" spellcheck="false">Bass DI</td>
+              <td contenteditable="true" spellcheck="false">DI Box</td>
+              <td contenteditable="true" spellcheck="false">No</td>
+              <td class="phantom-cell"><input type="checkbox" /></td>
+              <td contenteditable="true" spellcheck="false"></td>
+            </tr>
+            <tr>
+              <td class="ch-num">7</td>
+              <td contenteditable="true" spellcheck="false">Guitar</td>
+              <td contenteditable="true" spellcheck="false">SM57</td>
+              <td contenteditable="true" spellcheck="false">No</td>
+              <td class="phantom-cell"><input type="checkbox" /></td>
+              <td contenteditable="true" spellcheck="false"></td>
+            </tr>
+            <tr>
+              <td class="ch-num">8</td>
+              <td contenteditable="true" spellcheck="false">Lead Vocal</td>
+              <td contenteditable="true" spellcheck="false">SM58</td>
+              <td contenteditable="true" spellcheck="false">Boom</td>
+              <td class="phantom-cell"><input type="checkbox" /></td>
+              <td contenteditable="true" spellcheck="false"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Monitor Mixes -->
+    <section class="section" id="section-monitors">
+      <h2 class="section-title">Monitor Mixes</h2>
+      <div class="table-actions">
+        <button id="btn-add-monitor" class="btn btn-sm">+ Add Mix</button>
+        <button id="btn-clear-monitors" class="btn btn-sm btn-danger">Clear</button>
+      </div>
+      <div class="table-wrap">
+        <table id="monitor-table">
+          <thead>
+            <tr>
+              <th class="drag-handle-cell"></th>
+              <th>#</th>
+              <th>Position / Person</th>
+              <th>Type</th>
+              <th>Mix Contents</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="monitor-tbody">
+            <tr>
+              <td class="drag-handle-cell"></td>
+              <td class="ch-num">1</td>
+              <td contenteditable="true" spellcheck="false">Lead Vocal</td>
+              <td class="type-cell"><select class="monitor-type"><option>Wedge</option><option>IEM</option></select></td>
+              <td contenteditable="true" spellcheck="false"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Notes -->
+    <section class="section" id="section-notes">
+      <h2 class="section-title">Additional Notes</h2>
+      <div class="notes-box" contenteditable="true" spellcheck="false"></div>
+    </section>
+  </main>
+
+  <script src="js/icon-data.js"></script>
+  <script src="js/stage.js"></script>
+  <script src="js/inputs.js"></script>
+  <script src="js/monitors.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/storage.js"></script>
+  <script>
+    // Keep separator visible only when both meta fields have content
+    (function () {
+      const venue = document.getElementById('meta-venue');
+      const date  = document.getElementById('meta-date');
+      const sep   = document.getElementById('meta-sep-1');
+      function updateSep() {
+        sep.classList.toggle('hidden', !venue.textContent.trim() || !date.textContent.trim());
+      }
+      venue.addEventListener('input', updateSep);
+      date.addEventListener('input', updateSep);
+      updateSep();
+
+      // Keep page title (used as PDF filename) in sync with act name
+      const actNameEl = document.querySelector('.act-name');
+      function updateTitle() {
+        const name = actNameEl.textContent.trim() || 'Act Name';
+        document.title = `${name} - Tech Rider`;
+      }
+      actNameEl.addEventListener('input', updateTitle);
+      updateTitle();
+
+      let _stageWrapper = null;
+      let _origHeaderParent, _origMain, _origStageNext;
+
+      window.addEventListener('beforeprint', () => {
+        // Hide blank meta fields
+        if (!venue.textContent.trim()) venue.style.display = 'none';
+        if (!date.textContent.trim())  date.style.display  = 'none';
+
+        // Hide empty sections
+        const stageEmpty = document.querySelectorAll('#stage .stage-item').length === 0;
+        if (stageEmpty) document.getElementById('section-stage').style.display = 'none';
+
+        const inputsEmpty = Array.from(document.querySelectorAll('#input-tbody td[contenteditable]'))
+                              .every(td => !td.textContent.trim());
+        if (inputsEmpty) document.getElementById('section-inputs').style.display = 'none';
+
+        const monitorsEmpty = Array.from(document.querySelectorAll('#monitor-tbody td[contenteditable]'))
+                                .every(td => !td.textContent.trim());
+        if (monitorsEmpty) document.getElementById('section-monitors').style.display = 'none';
+
+        const notes = document.querySelector('.notes-box');
+        if (!notes.textContent.trim()) document.getElementById('section-notes').style.display = 'none';
+
+        // Wrap header + stage section together and rotate as one unit
+        const header       = document.querySelector('.header');
+        const stageSection = document.getElementById('section-stage');
+        if (!header || !stageSection || stageSection.style.display === 'none') return;
+
+        _origHeaderParent = header.parentNode;
+        _origMain         = document.querySelector('main');
+        _origStageNext    = stageSection.nextSibling;
+
+        _stageWrapper = document.createElement('div');
+        _stageWrapper.id = 'print-stage-wrapper';
+        _origHeaderParent.insertBefore(_stageWrapper, _origMain);
+        _stageWrapper.appendChild(header);
+        _stageWrapper.appendChild(stageSection);
+        // Rotation and sizing handled entirely by @media print CSS
+      });
+
+      window.addEventListener('afterprint', () => {
+        venue.style.display = '';
+        date.style.display  = '';
+        document.getElementById('section-stage').style.display    = '';
+        document.getElementById('section-inputs').style.display   = '';
+        document.getElementById('section-monitors').style.display = '';
+        document.getElementById('section-notes').style.display    = '';
+
+        if (_stageWrapper) {
+          const header       = _stageWrapper.querySelector('.header');
+          const stageSection = _stageWrapper.querySelector('#section-stage');
+          // Restore header before main
+          _origHeaderParent.insertBefore(header, _origMain);
+          // Restore stage section to its original position inside main
+          _origMain.insertBefore(stageSection, _origStageNext);
+          _stageWrapper.remove();
+          _stageWrapper = null;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
