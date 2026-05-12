@@ -15,6 +15,7 @@ const ICONS = {
   laptop:     { label: 'Laptop' },
   power:      { label: 'Power' },
   iem:        { label: 'IEM', noIcon: true },
+  text:       { label: 'Text', noIcon: true },
 };
 
 const TOOL_GROUPS = [
@@ -23,7 +24,7 @@ const TOOL_GROUPS = [
   { label: 'Keys',      types: ['keys', 'synth', 'piano'] },
   { label: 'Drums',     types: ['drums'] },
   { label: 'Amps',      types: ['amp-guitar', 'amp-bass'] },
-  { label: 'Equipment', types: ['dj', 'di', 'monitor', 'laptop', 'power', 'iem'] },
+  { label: 'Equipment', types: ['dj', 'di', 'monitor', 'laptop', 'power', 'iem', 'text'] },
 ];
 
 const stage = document.getElementById('stage');

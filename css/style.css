@@ -337,6 +337,25 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; display: flex; fle
   justify-content: center;
 }
 
+.stage-item:has(.icon[data-type="text"]) .icon { display: none; }
+.stage-item:has(.icon[data-type="text"]) {
+  gap: 0;
+  border: 1.5px dashed #aaa;
+  border-radius: 4px;
+  padding: 6px 10px;
+  width: auto;
+  min-width: 60px;
+  justify-content: center;
+}
+.stage-item:has(.icon[data-type="text"]) .item-label {
+  font-size: 13px;
+  max-width: 200px;
+}
+body.exporting .stage-item:has(.icon[data-type="text"]) {
+  border-color: transparent;
+  padding: 0;
+}
+
 .stage-item .icon[data-type="synth"] { height: auto !important; }
 .stage-item .icon[data-type="synth"] svg { width: 100%; height: auto !important; }
 .stage-item:has(.icon[data-type="synth"]) { gap: 0; }
@@ -574,6 +593,8 @@ body.exporting .notes-box { background: transparent; border: none; border-left: 
 
   /* Input list starts on page 2 — only add break if NOT first in flow */
   #section-inputs { break-before: auto; }
+
+  .stage-item:has(.icon[data-type="text"]) { border-color: transparent; padding: 0; }
 
   .stage-wrap { overflow: visible; }
   .stage { overflow: visible; background-image: none; border-color: #999; border-radius: 0; }
