@@ -232,7 +232,7 @@ function makeRotatable(item, handle) {
     function onMove(e) {
       const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
       let rotation = startRotation + (angle - startAngle);
-      if (snapEnabled) rotation = Math.round(rotation / 90) * 90;
+      if (snapEnabled) rotation = Math.round(rotation / 45) * 45;
       icon._rotation = rotation;
       icon.style.transform = `rotate(${rotation}deg)`;
     }
