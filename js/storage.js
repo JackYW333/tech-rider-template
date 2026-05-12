@@ -89,12 +89,16 @@ function loadState() {
 
 // ── File export / import ─────────────────────────────────────
 
+function normaliseText(el) {
+  return el.textContent.replace(/[ \n\r]/g, ' ').replace(/  +/g, ' ');
+}
+
 function getState() {
   return {
-    actName:    document.querySelector('.act-name').textContent,
-    actSubtitle:document.querySelector('.act-subtitle').textContent,
-    venue:      document.getElementById('meta-venue').textContent,
-    date:       document.getElementById('meta-date').textContent,
+    actName:    normaliseText(document.querySelector('.act-name')),
+    actSubtitle:normaliseText(document.querySelector('.act-subtitle')),
+    venue:      normaliseText(document.getElementById('meta-venue')),
+    date:       normaliseText(document.getElementById('meta-date')),
     notes:      document.querySelector('.notes-box').textContent,
     stage:      serializeStage(),
     inputs:     serializeTable('input-tbody'),
