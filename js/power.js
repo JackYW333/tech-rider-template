@@ -67,7 +67,6 @@ function buildPowerRow(num) {
     <td class="ch-num">${num}</td>
     <td contenteditable="true" spellcheck="false"></td>
     <td contenteditable="true" spellcheck="false"></td>
-    <td contenteditable="true" spellcheck="false"></td>
   `;
   addPowerDragHandle(tr);
   addPowerDeleteButton(tr);

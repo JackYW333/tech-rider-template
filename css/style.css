@@ -130,33 +130,38 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; display: flex; fle
 /* ── Stage toolbar ── */
 .stage-toolbar {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0;
-  align-items: flex-start;
   margin-bottom: 14px;
 }
 
-.tool-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 0 16px;
-  border-left: 1px solid var(--border);
-}
-.tool-group:first-child { padding-left: 0; border-left: none; }
-
-.tool-group-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-}
-
-.tool-group-buttons {
+.toolbar-categories {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
+
+.tool-cat-btn {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.tool-cat-btn:hover { background: var(--border); }
+.tool-cat-btn.active { background: var(--accent); color: #111; border-color: var(--accent); }
+
+.toolbar-panel {
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 10px;
+}
+.toolbar-panel.active { display: flex; }
 
 .stage-controls {
   display: flex;
@@ -319,6 +324,25 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; display: flex; fle
 .stage-item .icon[data-type="power"] { width: 28px; height: 28px; }
 .stage-item:has(.icon[data-type="power"]) .item-label { display: none; }
 .stage-item:has(.icon[data-type="di"]) .item-label { display: none; }
+
+.stage-item:has(.icon[data-type="iem"]) .icon { display: none; }
+.stage-item:has(.icon[data-type="iem"]) {
+  gap: 0;
+  background: #f0f0f0;
+  border: 1.5px solid #aaa;
+  border-radius: 4px;
+  padding: 6px 10px;
+  width: auto;
+  min-width: 44px;
+  justify-content: center;
+}
+
+.stage-item .icon[data-type="synth"] { height: auto !important; }
+.stage-item .icon[data-type="synth"] svg { width: 100%; height: auto !important; }
+.stage-item:has(.icon[data-type="synth"]) { gap: 0; }
+.stage-item .icon[data-type="piano"] { height: auto !important; }
+.stage-item .icon[data-type="piano"] svg { width: 100%; height: auto !important; }
+.stage-item:has(.icon[data-type="piano"]) { gap: 0; }
 
 
 

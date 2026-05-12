@@ -5,18 +5,25 @@ const ICONS = {
   'guitar-acoustic': { label: 'Acoustic' },
   bass:       { label: 'Bass' },
   keys:       { label: 'Keys' },
+  synth:      { label: 'Synth' },
+  piano:      { label: 'Piano' },
   'amp-guitar': { label: 'Guitar Amp' },
   'amp-bass':   { label: 'Bass Amp' },
+  dj:         { label: 'DJ' },
   di:         { label: 'DI' },
   monitor:    { label: 'Monitor' },
   laptop:     { label: 'Laptop' },
   power:      { label: 'Power' },
+  iem:        { label: 'IEM', noIcon: true },
 };
 
 const TOOL_GROUPS = [
-  { label: 'Instruments', types: ['vocal', 'guitar-electric', 'guitar-acoustic', 'bass', 'drums', 'keys'] },
-  { label: 'Amps',        types: ['amp-guitar', 'amp-bass'] },
-  { label: 'Equipment',   types: ['di', 'monitor', 'laptop', 'power'] },
+  { label: 'Vocals',    types: ['vocal'] },
+  { label: 'Guitars',   types: ['guitar-electric', 'guitar-acoustic', 'bass'] },
+  { label: 'Keys',      types: ['keys', 'synth', 'piano'] },
+  { label: 'Drums',     types: ['drums'] },
+  { label: 'Amps',      types: ['amp-guitar', 'amp-bass'] },
+  { label: 'Equipment', types: ['dj', 'di', 'monitor', 'laptop', 'power', 'iem'] },
 ];
 
 const stage = document.getElementById('stage');
@@ -26,17 +33,20 @@ let snapEnabled = false;
 function snapVal(v) { return snapEnabled ? Math.round(v / GRID) * GRID : v; }
 
 (function buildToolbar() {
-  const toolbar = document.getElementById('stage-toolbar');
+  const toolbar  = document.getElementById('stage-toolbar');
+  const catsEl   = document.createElement('div');
+  catsEl.className = 'toolbar-categories';
+  const panelsEl = document.createElement('div');
+  panelsEl.className = 'toolbar-panels';
+
   TOOL_GROUPS.forEach(group => {
-    const groupEl = document.createElement('div');
-    groupEl.className = 'tool-group';
+    const catBtn = document.createElement('button');
+    catBtn.className = 'tool-cat-btn';
+    catBtn.textContent = group.label;
+    catsEl.appendChild(catBtn);
 
-    const labelEl = document.createElement('span');
-    labelEl.className = 'tool-group-label';
-    labelEl.textContent = group.label;
-
-    const buttonsEl = document.createElement('div');
-    buttonsEl.className = 'tool-group-buttons';
+    const panel = document.createElement('div');
+    panel.className = 'toolbar-panel';
 
     group.types.forEach(type => {
       const cfg = ICONS[type];
@@ -44,16 +54,26 @@ function snapVal(v) { return snapEnabled ? Math.round(v / GRID) * GRID : v; }
       btn.className = 'tool-btn';
       btn.dataset.type = type;
       btn.title = cfg.label;
-
       btn.textContent = cfg.toolbarLabel !== undefined ? cfg.toolbarLabel : cfg.label;
       btn.addEventListener('click', () => addItem(type));
-      buttonsEl.appendChild(btn);
+      panel.appendChild(btn);
     });
 
-    groupEl.appendChild(labelEl);
-    groupEl.appendChild(buttonsEl);
-    toolbar.appendChild(groupEl);
+    panelsEl.appendChild(panel);
+
+    catBtn.addEventListener('click', () => {
+      const isActive = catBtn.classList.contains('active');
+      catsEl.querySelectorAll('.tool-cat-btn').forEach(b => b.classList.remove('active'));
+      panelsEl.querySelectorAll('.toolbar-panel').forEach(p => p.classList.remove('active'));
+      if (!isActive) {
+        catBtn.classList.add('active');
+        panel.classList.add('active');
+      }
+    });
   });
+
+  toolbar.appendChild(catsEl);
+  toolbar.appendChild(panelsEl);
 })();
 
 // ── Undo / Redo ───────────────────────────────────────────────
@@ -133,17 +153,19 @@ function addItem(type) {
   const icon = document.createElement('div');
   icon.className = 'icon';
   icon.dataset.type = type;
-  if (ICON_SVG && ICON_SVG[type]) {
-    icon.innerHTML = ICON_SVG[type];
-    const svg = icon.querySelector('svg');
-    if (svg) { svg.setAttribute('aria-label', cfg.label); }
-  } else {
-    // Fallback to img if inline SVG not available
-    const img = document.createElement('img');
-    img.src = `assets/icons/${type}.svg`;
-    img.alt = cfg.label;
-    img.draggable = false;
-    icon.appendChild(img);
+  if (!cfg.noIcon) {
+    if (ICON_SVG && ICON_SVG[type]) {
+      icon.innerHTML = ICON_SVG[type];
+      const svg = icon.querySelector('svg');
+      if (svg) { svg.setAttribute('aria-label', cfg.label); }
+    } else {
+      // Fallback to img if inline SVG not available
+      const img = document.createElement('img');
+      img.src = `assets/icons/${type}.svg`;
+      img.alt = cfg.label;
+      img.draggable = false;
+      icon.appendChild(img);
+    }
   }
 
   const label = document.createElement('div');
