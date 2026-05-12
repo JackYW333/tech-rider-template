@@ -39,8 +39,7 @@ async function captureElement(el, width) {
     windowWidth: width || document.documentElement.offsetWidth,
     onclone: (clonedDoc) => {
       clonedDoc.querySelectorAll('.act-name, .act-subtitle, .meta-field').forEach(clonedEl => {
-        clonedEl.style.whiteSpace = 'pre';
-        clonedEl.textContent = clonedEl.textContent.replace(/ /g, ' ');
+        clonedEl.textContent = clonedEl.textContent.replace(/ /g, '  ');
       });
     },
   });
