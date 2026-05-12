@@ -72,11 +72,13 @@ document.getElementById('btn-export-jpg').addEventListener('click', async () => 
     '.header-actions, .stage-toolbar, .stage-controls, .stage-hint, .table-actions, .row-delete, .drag-handle-cell, .rotate-handle, .resize-handle'
   );
   const hiddenMeta = [];
+  const spaceFixes = [];
 
   function cleanup() {
     document.body.classList.remove('exporting');
     hideEls.forEach(el => el.style.visibility = '');
     hiddenMeta.forEach(el => el.style.display = '');
+    spaceFixes.forEach(({ el, text }) => { el.textContent = text; });
   }
 
   try {
@@ -86,6 +88,13 @@ document.getElementById('btn-export-jpg').addEventListener('click', async () => 
     hideEls.forEach(el => el.style.visibility = 'hidden');
     hiddenMeta.push(...prepareMetaForExport());
     document.body.classList.add('exporting');
+
+    // html2canvas collapses regular spaces — swap them for non-breaking spaces before capture
+    document.querySelectorAll('.act-name, .act-subtitle, .meta-field').forEach(el => {
+      const original = el.textContent;
+      spaceFixes.push({ el, text: original });
+      el.textContent = original.replace(/ /g, ' ');
+    });
 
 
     // Header (only if user has filled something in)
