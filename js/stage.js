@@ -1,8 +1,8 @@
 const ICONS = {
   vocal:      { label: 'Vocal' },
   drums:      { label: 'Drums' },
-  'guitar-electric': { label: 'Electric Guitar' },
-  'guitar-acoustic': { label: 'Acoustic Guitar' },
+  'guitar-electric': { label: 'Electric' },
+  'guitar-acoustic': { label: 'Acoustic' },
   bass:       { label: 'Bass' },
   keys:       { label: 'Keys' },
   'amp-guitar': { label: 'Guitar Amp' },
@@ -13,15 +13,48 @@ const ICONS = {
   power:      { label: 'Power' },
 };
 
+const TOOL_GROUPS = [
+  { label: 'Instruments', types: ['vocal', 'guitar-electric', 'guitar-acoustic', 'bass', 'drums', 'keys'] },
+  { label: 'Amps',        types: ['amp-guitar', 'amp-bass'] },
+  { label: 'Equipment',   types: ['di', 'monitor', 'laptop', 'power'] },
+];
+
 const stage = document.getElementById('stage');
 const GRID  = 40;
 let snapEnabled = false;
 
 function snapVal(v) { return snapEnabled ? Math.round(v / GRID) * GRID : v; }
 
-document.querySelectorAll('.tool-btn[data-type]').forEach(btn => {
-  btn.addEventListener('click', () => addItem(btn.dataset.type));
-});
+(function buildToolbar() {
+  const toolbar = document.getElementById('stage-toolbar');
+  TOOL_GROUPS.forEach(group => {
+    const groupEl = document.createElement('div');
+    groupEl.className = 'tool-group';
+
+    const labelEl = document.createElement('span');
+    labelEl.className = 'tool-group-label';
+    labelEl.textContent = group.label;
+
+    const buttonsEl = document.createElement('div');
+    buttonsEl.className = 'tool-group-buttons';
+
+    group.types.forEach(type => {
+      const cfg = ICONS[type];
+      const btn = document.createElement('button');
+      btn.className = 'tool-btn';
+      btn.dataset.type = type;
+      btn.title = cfg.label;
+
+      btn.textContent = cfg.toolbarLabel !== undefined ? cfg.toolbarLabel : cfg.label;
+      btn.addEventListener('click', () => addItem(type));
+      buttonsEl.appendChild(btn);
+    });
+
+    groupEl.appendChild(labelEl);
+    groupEl.appendChild(buttonsEl);
+    toolbar.appendChild(groupEl);
+  });
+})();
 
 // ── Undo / Redo ───────────────────────────────────────────────
 const undoStack = [];
