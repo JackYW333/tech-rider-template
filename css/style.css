@@ -464,6 +464,9 @@ body.exporting .act-name { color: var(--accent2); }
 body.exporting .act-subtitle,
 body.exporting .meta-field,
 body.exporting .meta-sep { color: #555; }
+body.exporting .act-name,
+body.exporting .act-subtitle,
+body.exporting .meta-field { white-space: pre-wrap; }
 body.exporting .section { border-color: #ddd; border-radius: 0; }
 body.exporting .section-title {
   color: var(--accent2);
