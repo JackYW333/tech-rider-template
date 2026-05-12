@@ -169,6 +169,31 @@
       </div>
     </section>
 
+    <!-- Power Requirements -->
+    <section class="section" id="section-power">
+      <h2 class="section-title">Power Requirements</h2>
+      <div class="table-actions">
+        <button id="btn-add-power" class="btn btn-sm">+ Add Item</button>
+        <button id="btn-clear-power" class="btn btn-sm btn-danger">Clear</button>
+      </div>
+      <div class="table-wrap">
+        <table id="power-table">
+          <thead>
+            <tr>
+              <th class="drag-handle-cell"></th>
+              <th>#</th>
+              <th>Item / Device</th>
+              <th>Outlets</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="power-tbody">
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <!-- Notes -->
     <section class="section" id="section-notes">
       <h2 class="section-title">Additional Notes</h2>
@@ -180,6 +205,7 @@
   <script src="js/stage.js"></script>
   <script src="js/inputs.js"></script>
   <script src="js/monitors.js"></script>
+  <script src="js/power.js"></script>
   <script src="js/export.js"></script>
   <script src="js/storage.js"></script>
   <script>
@@ -224,6 +250,10 @@
                                 .every(td => !td.textContent.trim());
         if (monitorsEmpty) document.getElementById('section-monitors').style.display = 'none';
 
+        const powerEmpty = Array.from(document.querySelectorAll('#power-tbody td[contenteditable]'))
+                             .every(td => !td.textContent.trim());
+        if (powerEmpty) document.getElementById('section-power').style.display = 'none';
+
         const notes = document.querySelector('.notes-box');
         if (!notes.textContent.trim()) document.getElementById('section-notes').style.display = 'none';
 
@@ -250,6 +280,7 @@
         document.getElementById('section-stage').style.display    = '';
         document.getElementById('section-inputs').style.display   = '';
         document.getElementById('section-monitors').style.display = '';
+        document.getElementById('section-power').style.display    = '';
         document.getElementById('section-notes').style.display    = '';
 
         if (_stageWrapper) {

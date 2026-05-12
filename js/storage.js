@@ -103,6 +103,7 @@ function getState() {
     stage:      serializeStage(),
     inputs:     serializeTable('input-tbody'),
     monitors:   serializeTable('monitor-tbody'),
+    power:      serializeTable('power-tbody'),
   };
 }
 
@@ -148,6 +149,7 @@ function applyState(state) {
   restoreStage(state.stage);
   restoreTable('input-tbody',   state.inputs,   buildRow);
   restoreTable('monitor-tbody', state.monitors, buildMonitorRow);
+  if (state.power && state.power.length) restoreTable('power-tbody', state.power, buildPowerRow);
   document.getElementById('meta-venue').dispatchEvent(new Event('input'));
 }
 
@@ -170,6 +172,7 @@ function clearAll() {
   document.getElementById('monitor-tbody').innerHTML = '';
   const mrow = buildMonitorRow(1);
   document.getElementById('monitor-tbody').appendChild(mrow);
+  document.getElementById('power-tbody').innerHTML = '';
   document.querySelector('.act-name').textContent     = 'Act Name';
   document.querySelector('.act-subtitle').textContent = 'Tech Rider';
   document.getElementById('meta-venue').textContent   = '';
@@ -196,6 +199,12 @@ document.getElementById('btn-clear-monitors').addEventListener('click', () => {
   const tbody = document.getElementById('monitor-tbody');
   tbody.innerHTML = '';
   tbody.appendChild(buildMonitorRow(1));
+  saveState();
+});
+
+document.getElementById('btn-clear-power').addEventListener('click', () => {
+  if (!confirm('Clear all power requirements?')) return;
+  document.getElementById('power-tbody').innerHTML = '';
   saveState();
 });
 

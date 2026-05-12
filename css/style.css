@@ -340,18 +340,18 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; display: flex; fle
   text-align: center;
 }
 
-/* ── Input list ── */
+/* ── Tables ── */
 .table-actions { margin-bottom: 12px; }
 
 .table-wrap { overflow-x: auto; }
 
-#input-table, #monitor-table {
+#input-table, #monitor-table, #power-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
 }
 
-#input-table th, #monitor-table th {
+#input-table th, #monitor-table th, #power-table th {
   background: var(--surface2);
   color: var(--accent);
   text-align: left;
@@ -362,20 +362,20 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; display: flex; fle
   border-bottom: 2px solid var(--border);
 }
 
-#input-table td, #monitor-table td {
+#input-table td, #monitor-table td, #power-table td {
   padding: 8px 12px;
   border-bottom: 1px solid var(--border);
   vertical-align: middle;
 }
 
-#input-table tbody tr:hover td, #monitor-table tbody tr:hover td { background: var(--surface2); }
+#input-table tbody tr:hover td, #monitor-table tbody tr:hover td, #power-table tbody tr:hover td { background: var(--surface2); }
 
-#input-table td[contenteditable], #monitor-table td[contenteditable] {
+#input-table td[contenteditable], #monitor-table td[contenteditable], #power-table td[contenteditable] {
   outline: none;
   cursor: text;
   border-radius: 3px;
 }
-#input-table td[contenteditable]:focus, #monitor-table td[contenteditable]:focus {
+#input-table td[contenteditable]:focus, #monitor-table td[contenteditable]:focus, #power-table td[contenteditable]:focus {
   background: #333;
   box-shadow: inset 0 0 0 1px var(--accent);
 }
@@ -397,8 +397,8 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; display: flex; fle
 .drag-handle:hover { color: var(--accent); }
 .drag-handle:active { cursor: grabbing; }
 
-#input-table tbody tr.dragging, #monitor-table tbody tr.dragging { opacity: 0.4; }
-#input-table tbody tr.drag-over, #monitor-table tbody tr.drag-over { outline: 2px solid var(--accent); outline-offset: -2px; }
+#input-table tbody tr.dragging, #monitor-table tbody tr.dragging, #power-table tbody tr.dragging { opacity: 0.4; }
+#input-table tbody tr.drag-over, #monitor-table tbody tr.drag-over, #power-table tbody tr.drag-over { outline: 2px solid var(--accent); outline-offset: -2px; }
 
 .type-cell { width: 100px; }
 .monitor-type {
@@ -475,18 +475,19 @@ body.exporting .section-title {
   padding-left: 10px;
   margin-bottom: 18px;
 }
-body.exporting #input-table, body.exporting #monitor-table { border: none; border-collapse: collapse; }
-body.exporting #input-table th, body.exporting #monitor-table th { background: #e8e8e8; color: var(--accent2); border: none; border-right: 1px solid #ccc; border-bottom: 2px solid #bbb; }
-body.exporting #input-table th:last-child, body.exporting #monitor-table th:last-child { border-right: none; }
-body.exporting #input-table td, body.exporting #monitor-table td { border: none; border-right: 1px solid #e0e0e0; background: transparent; color: #111; }
-body.exporting #input-table td:last-child, body.exporting #monitor-table td:last-child { border-right: none; }
+body.exporting #input-table, body.exporting #monitor-table, body.exporting #power-table { border: none; border-collapse: collapse; }
+body.exporting #input-table th, body.exporting #monitor-table th, body.exporting #power-table th { background: #e8e8e8; color: var(--accent2); border: none; border-right: 1px solid #ccc; border-bottom: 2px solid #bbb; }
+body.exporting #input-table th:last-child, body.exporting #monitor-table th:last-child, body.exporting #power-table th:last-child { border-right: none; }
+body.exporting #input-table td, body.exporting #monitor-table td, body.exporting #power-table td { border: none; border-right: 1px solid #e0e0e0; background: transparent; color: #111; }
+body.exporting #input-table td:last-child, body.exporting #monitor-table td:last-child, body.exporting #power-table td:last-child { border-right: none; }
 body.exporting #input-table tbody tr:nth-child(even),
-body.exporting #monitor-table tbody tr:nth-child(even) { background: #ebebeb; }
-body.exporting #input-table tbody tr:hover, body.exporting #monitor-table tbody tr:hover { background: #e4e4e4; }
+body.exporting #monitor-table tbody tr:nth-child(even),
+body.exporting #power-table tbody tr:nth-child(even) { background: #ebebeb; }
+body.exporting #input-table tbody tr:hover, body.exporting #monitor-table tbody tr:hover, body.exporting #power-table tbody tr:hover { background: #e4e4e4; }
 body.exporting .table-actions, body.exporting .drag-handle-cell, body.exporting .row-delete { display: none !important; }
-body.exporting #input-table th:last-child, body.exporting #monitor-table th:last-child { display: none !important; }
-body.exporting #input-table td:has(.row-delete), body.exporting #monitor-table td:has(.row-delete) { display: none !important; }
-body.exporting #input-table td[contenteditable]:focus, body.exporting #monitor-table td[contenteditable]:focus { background: inherit; box-shadow: none; }
+body.exporting #input-table th:last-child, body.exporting #monitor-table th:last-child, body.exporting #power-table th:last-child { display: none !important; }
+body.exporting #input-table td:has(.row-delete), body.exporting #monitor-table td:has(.row-delete), body.exporting #power-table td:has(.row-delete) { display: none !important; }
+body.exporting #input-table td[contenteditable]:focus, body.exporting #monitor-table td[contenteditable]:focus, body.exporting #power-table td[contenteditable]:focus { background: inherit; box-shadow: none; }
 body.exporting .ch-num { color: #888; }
 body.exporting .stage { background-image: none; border-color: #999; border-radius: 0; }
 body.exporting .stage-label-audience,
@@ -503,8 +504,8 @@ body.exporting .notes-box { background: transparent; border: none; border-left: 
   .act-name { color: var(--accent2); }
   .act-subtitle, .meta-field, .meta-sep { color: #555; }
   .header-actions, .stage-toolbar, .stage-controls, .stage-hint, .table-actions, .row-delete, .drag-handle-cell, .rotate-handle, .resize-handle { display: none !important; }
-  #input-table th:last-child, #monitor-table th:last-child { display: none !important; }
-  #input-table td:has(.row-delete), #monitor-table td:has(.row-delete) { display: none !important; }
+  #input-table th:last-child, #monitor-table th:last-child, #power-table th:last-child { display: none !important; }
+  #input-table td:has(.row-delete), #monitor-table td:has(.row-delete), #power-table td:has(.row-delete) { display: none !important; }
 
   main { padding-top: 0; padding-bottom: 0; gap: 20px; }
 
@@ -555,21 +556,22 @@ body.exporting .notes-box { background: transparent; border: none; border-left: 
   .stage-label-audience,
   .stage-label-back { color: #aaaaaa; }
 
-  #input-table, #monitor-table { border: none !important; border-collapse: collapse !important; }
-  #input-table th, #monitor-table th {
+  #input-table, #monitor-table, #power-table { border: none !important; border-collapse: collapse !important; }
+  #input-table th, #monitor-table th, #power-table th {
     background: #e8e8e8 !important; color: var(--accent2) !important;
     border: none !important; border-right: 1px solid #ccc !important; border-bottom: 2px solid #bbb !important;
     -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
   }
-  #input-table th:last-child, #monitor-table th:last-child { border-right: none !important; }
-  #input-table td, #monitor-table td {
+  #input-table th:last-child, #monitor-table th:last-child, #power-table th:last-child { border-right: none !important; }
+  #input-table td, #monitor-table td, #power-table td {
     background: #ffffff !important; color: #111 !important;
     border: none !important; border-right: 1px solid #e0e0e0 !important;
     -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
   }
-  #input-table td:last-child, #monitor-table td:last-child { border-right: none !important; }
+  #input-table td:last-child, #monitor-table td:last-child, #power-table td:last-child { border-right: none !important; }
   #input-table tbody tr:nth-child(even) td,
-  #monitor-table tbody tr:nth-child(even) td {
+  #monitor-table tbody tr:nth-child(even) td,
+  #power-table tbody tr:nth-child(even) td {
     background: #ebebeb !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
   }
   .ch-num { color: #888; }

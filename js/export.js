@@ -110,8 +110,11 @@ document.getElementById('btn-export-jpg').addEventListener('click', async () => 
     const hasInputs = Array.from(document.querySelectorAll('#input-tbody td[contenteditable]'))
                         .some(td => td.textContent.trim() !== '');
     const monitorEl = document.getElementById('section-monitors');
+    const powerEl   = document.getElementById('section-power');
     const notesEl   = document.querySelector('.notes-box');
     const hasMonitors = Array.from(monitorEl.querySelectorAll('tbody td[contenteditable]'))
+                          .some(td => td.textContent.trim() !== '');
+    const hasPower    = Array.from(powerEl.querySelectorAll('tbody td[contenteditable]'))
                           .some(td => td.textContent.trim() !== '');
     const hasNotes    = notesEl.textContent.trim() !== '';
 
@@ -124,16 +127,17 @@ document.getElementById('btn-export-jpg').addEventListener('click', async () => 
       downloadCount++;
     }
 
-    // --- Input list + Monitor mix + Notes ---
-    if (hasInputs || hasMonitors || hasNotes) {
+    // --- Input list + Monitor mix + Power + Notes ---
+    if (hasInputs || hasMonitors || hasPower || hasNotes) {
       if (downloadCount > 0) await new Promise(r => setTimeout(r, 400));
 
-      // Measure combined display height of all three sections + gaps between them
+      // Measure combined display height of all sections + gaps between them
       const A4_HEIGHT = 960; // ~A4 portrait content area at 96dpi
       const GAP = 40;        // gap between stacked sections (matches 80px canvas gap / scale 2)
       let combinedH = 0;
       if (hasInputs)   combinedH += document.getElementById('section-inputs').offsetHeight;
       if (hasMonitors) combinedH += (combinedH > 0 ? GAP : 0) + monitorEl.offsetHeight;
+      if (hasPower)    combinedH += (combinedH > 0 ? GAP : 0) + powerEl.offsetHeight;
       if (hasNotes)    combinedH += (combinedH > 0 ? GAP : 0) + document.getElementById('section-notes').offsetHeight;
 
       if (combinedH <= A4_HEIGHT) {
@@ -144,6 +148,10 @@ document.getElementById('btn-export-jpg').addEventListener('click', async () => 
           const c = await captureElement(monitorEl);
           combined = combined ? stackCanvases(combined, c, 80) : c;
         }
+        if (hasPower) {
+          const c = await captureElement(powerEl);
+          combined = combined ? stackCanvases(combined, c, 80) : c;
+        }
         if (hasNotes) {
           const c = await captureElement(document.getElementById('section-notes'));
           combined = combined ? stackCanvases(combined, c, 80) : c;
@@ -151,15 +159,19 @@ document.getElementById('btn-export-jpg').addEventListener('click', async () => 
         downloadCanvas(withHeader(combined), `${name}-input-list.jpg`);
 
       } else {
-        // Too tall — input list on its own, monitors+notes together
+        // Too tall — input list on its own, monitors+power+notes together
         if (hasInputs) {
           const inputCanvas = await captureElement(document.getElementById('section-inputs'));
           downloadCanvas(withHeader(inputCanvas), `${name}-input-list.jpg`);
         }
-        if (hasMonitors || hasNotes) {
+        if (hasMonitors || hasPower || hasNotes) {
           await new Promise(r => setTimeout(r, 400));
           let monNotesCanvas = null;
           if (hasMonitors) monNotesCanvas = await captureElement(monitorEl);
+          if (hasPower) {
+            const c = await captureElement(powerEl);
+            monNotesCanvas = monNotesCanvas ? stackCanvases(monNotesCanvas, c, 80) : c;
+          }
           if (hasNotes) {
             const c = await captureElement(document.getElementById('section-notes'));
             monNotesCanvas = monNotesCanvas ? stackCanvases(monNotesCanvas, c, 80) : c;
