@@ -21,6 +21,7 @@ function serializeStage() {
       top:      item.style.top,
       rotation: icon._rotation || 0,
       size:     icon._size     || null,
+      fontSize: label._fontSize || null,
       label:    label.textContent,
     };
   });
@@ -48,7 +49,7 @@ function saveState() {
 function restoreStage(items) {
   if (!items || !items.length) return;
   // addItem is defined in stage.js — call it then patch position/rotation/label
-  items.forEach(({ type, left, top, rotation, size, label }) => {
+  items.forEach(({ type, left, top, rotation, size, fontSize, label }) => {
     if (!type) return;
     addItem(type);
     const item = document.querySelector('#stage .stage-item:last-child');
@@ -56,11 +57,12 @@ function restoreStage(items) {
     item.style.top  = top;
     const icon = item.querySelector('.icon');
     if (rotation) {
-      icon._rotation = rotation;
-      icon.style.transform = `rotate(${rotation}deg)`;
+      applyRotation(icon, item, rotation);
     }
     if (size) setIconSize(item, icon, size);
-    item.querySelector('.item-label').textContent = label;
+    const lbl = item.querySelector('.item-label');
+    if (fontSize) setTextSize(item, lbl, fontSize);
+    lbl.textContent = label;
   });
 }
 

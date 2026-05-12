@@ -11,7 +11,7 @@ const ICONS = {
   'amp-bass':   { label: 'Bass Amp' },
   dj:         { label: 'DJ' },
   di:         { label: 'DI' },
-  monitor:    { label: 'Monitor' },
+  monitor:    { label: 'Wedge' },
   laptop:     { label: 'Laptop' },
   power:      { label: 'Power' },
   iem:        { label: 'IEM', noIcon: true },
@@ -23,8 +23,9 @@ const TOOL_GROUPS = [
   { label: 'Guitars',   types: ['guitar-electric', 'guitar-acoustic', 'bass'] },
   { label: 'Keys',      types: ['keys', 'synth', 'piano'] },
   { label: 'Drums',     types: ['drums'] },
+  { label: 'Monitors',  types: ['monitor', 'iem'] },
   { label: 'Amps',      types: ['amp-guitar', 'amp-bass'] },
-  { label: 'Equipment', types: ['dj', 'di', 'monitor', 'laptop', 'power', 'iem', 'text'] },
+  { label: 'Equipment', types: ['dj', 'di', 'laptop', 'power', 'text'] },
 ];
 
 const stage = document.getElementById('stage');
@@ -108,13 +109,18 @@ function applyUndoRedo(action, targetStack) {
   } else if (action.type === 'rotate') {
     const current = action.icon._rotation || 0;
     inverse = { type: 'rotate', icon: action.icon, rotation: current };
-    action.icon._rotation = action.rotation;
-    action.icon.style.transform = action.rotation ? `rotate(${action.rotation}deg)` : '';
+    applyRotation(action.icon, action.icon.closest('.stage-item'), action.rotation);
 
   } else if (action.type === 'resize') {
-    const current = action.icon._size || action.icon.offsetWidth;
-    inverse = { type: 'resize', item: action.item, icon: action.icon, size: current };
-    setIconSize(action.item, action.icon, action.size);
+    if (action.isText) {
+      const current = action.label._fontSize || 13;
+      inverse = { type: 'resize', item: action.item, icon: action.icon, label: action.label, size: current, isText: true };
+      setTextSize(action.item, action.label, action.size);
+    } else {
+      const current = action.icon._size || action.icon.offsetWidth;
+      inverse = { type: 'resize', item: action.item, icon: action.icon, size: current };
+      setIconSize(action.item, action.icon, action.size);
+    }
   }
 
   if (inverse) {
@@ -187,7 +193,11 @@ function addItem(type) {
 
   item.appendChild(rotateHandle);
   item.appendChild(icon);
-  icon.appendChild(resizeHandle);
+  if (cfg.noIcon) {
+    item.appendChild(resizeHandle);
+  } else {
+    icon.appendChild(resizeHandle);
+  }
   item.appendChild(label);
 
   // Right-click to delete
@@ -212,31 +222,70 @@ function setIconSize(item, icon, size) {
   item.style.width  = Math.max(70, clamped) + 'px';
 }
 
+function setTextSize(item, label, size) {
+  const clamped = Math.max(8, Math.min(72, Math.round(size)));
+  label._fontSize = clamped;
+  label.style.fontSize = clamped + 'px';
+}
+
 function makeResizable(item, icon, handle) {
+  const isText = !!(ICONS[icon.dataset.type] && ICONS[icon.dataset.type].noIcon);
+  const label  = item.querySelector('.item-label');
+
   handle.addEventListener('mousedown', e => {
     e.preventDefault();
     e.stopPropagation();
 
-    const startX    = e.clientX;
-    const startY    = e.clientY;
-    const startSize = icon._size || icon.offsetWidth;
+    const startX = e.clientX;
+    const startY = e.clientY;
 
-    function onMove(e) {
-      const delta   = ((e.clientX - startX) + (e.clientY - startY)) / 2;
-      setIconSize(item, icon, startSize + delta);
-    }
+    if (isText) {
+      const startSize = label._fontSize || 13;
 
-    function onUp() {
-      if (icon._size !== startSize) {
-        pushUndo({ type: 'resize', item, icon, size: startSize });
+      function onMove(e) {
+        const delta = ((e.clientX - startX) + (e.clientY - startY)) / 2;
+        setTextSize(item, label, startSize + delta);
       }
-      document.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseup',   onUp);
-    }
 
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup',   onUp);
+      function onUp() {
+        if ((label._fontSize || 13) !== startSize) {
+          pushUndo({ type: 'resize', item, icon, label, size: startSize, isText: true });
+        }
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup',   onUp);
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup',   onUp);
+    } else {
+      const startSize = icon._size || icon.offsetWidth;
+
+      function onMove(e) {
+        const delta = ((e.clientX - startX) + (e.clientY - startY)) / 2;
+        setIconSize(item, icon, startSize + delta);
+      }
+
+      function onUp() {
+        if (icon._size !== startSize) {
+          pushUndo({ type: 'resize', item, icon, size: startSize });
+        }
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup',   onUp);
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup',   onUp);
+    }
   });
+}
+
+function applyRotation(icon, item, rotation) {
+  icon._rotation = rotation;
+  if (getComputedStyle(icon).display === 'none') {
+    item.style.transform = rotation ? `rotate(${rotation}deg)` : '';
+  } else {
+    icon.style.transform = rotation ? `rotate(${rotation}deg)` : '';
+  }
 }
 
 function makeRotatable(item, handle) {
@@ -246,7 +295,8 @@ function makeRotatable(item, handle) {
     e.preventDefault();
     e.stopPropagation();
 
-    const rect = icon.getBoundingClientRect();
+    const target  = getComputedStyle(icon).display === 'none' ? item : icon;
+    const rect    = target.getBoundingClientRect();
     const centerX = rect.left + rect.width  / 2;
     const centerY = rect.top  + rect.height / 2;
     const startAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
@@ -256,8 +306,7 @@ function makeRotatable(item, handle) {
       const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
       let rotation = startRotation + (angle - startAngle);
       if (snapEnabled) rotation = Math.round(rotation / 45) * 45;
-      icon._rotation = rotation;
-      icon.style.transform = `rotate(${rotation}deg)`;
+      applyRotation(icon, item, rotation);
     }
 
     function onUp() {
